@@ -1,16 +1,12 @@
 # chatroom
+Un semplice sistema di chat in tempo reale sviluppato in Flutter + Dart Socket.
+questa programma include:
+1.Un'app Flutter che permette agli utenti di collegarsi a una chatroom  
+2.Un server Socket scritto in Dart  
+3.Comunicazione in tempo reale tramite TCP
+4.Supporto multi–client (Android reale, emulatore, PC)  
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+fuzionalita principali
+1.insersci un username
+2.Collegati al server con un click
+3.Supporto per più dispositivi contemporaneamente
