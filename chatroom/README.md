@@ -8,6 +8,9 @@ Un semplice sistema di chat in tempo reale sviluppato in **Flutter + Dart Socket
 2. Un server Socket scritto in Dart  
 3. Comunicazione in tempo reale tramite TCP  
 4. Supporto multi–client (Android reale, emulatore, PC)
+5. Due versioni del client Flutter: main.dart e cellulareReale.dart  
+   - `main.dart` usa l'indirizzo IP dell'emulatore (10.0.2.2)  
+   - `cellulareReale.dart` richiede l'indirizzo IP reale del computer sulla stessa rete
 
 ---
 
@@ -16,3 +19,4 @@ Un semplice sistema di chat in tempo reale sviluppato in **Flutter + Dart Socket
 1. Inserisci un username  
 2. Collegati al server con un click  
 3. Supporto per più dispositivi contemporaneamente  
+
