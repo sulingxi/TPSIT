@@ -1,4 +1,7 @@
 # chatroom
+
+
+
 Un semplice sistema di chat in tempo reale sviluppato in Flutter + Dart Socket.
 questa programma include:
 1.Un'app Flutter che permette agli utenti di collegarsi a una chatroom  
@@ -10,3 +13,4 @@ fuzionalita principali
 1.insersci un username
 2.Collegati al server con un click
 3.Supporto per più dispositivi contemporaneamente
+
