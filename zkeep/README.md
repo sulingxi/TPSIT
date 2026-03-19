@@ -1,16 +1,30 @@
-# zkeep
+# ZKeep
 
-A new Flutter project.
+autore: Su Leo
 
-## Getting Started
+## Descrizione
+ZKeep è una applicazione semplice ispirata a Google Keep.
 
-This project is a starting point for a Flutter application.
+In questa app ci sono più note e ogni nota contiene una lista di promemoria.
+L'utente può creare una nuova nota e poi aggiungere i todo dentro la nota scelta.
 
-A few resources to get you started if this is your first Flutter project:
+## Scelte di sviluppo
+Ho mantenuto una struttura semplice con 4 file principali, simile all'esempio del professore.
+Ho usato SQLite perché i dati devono restare salvati anche dopo la chiusura dell'app.
+Ho creato due tabelle: `notes` e `todos`.
+Ho separato note e todo perché una nota può contenere più promemoria.
+Ho usato le card per mostrare le note nella pagina principale in modo più chiaro.
+Ho usato il FloatingActionButton per aggiungere una nota o un promemoria.
+Ho fatto una schermata principale per vedere le note e una schermata di dettaglio per vedere i todo della nota scelta.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Funzioni principali
+aggiunta di una nuova nota
+visualizzazione di più note
+apertura di una nota
+aggiunta di promemoria dentro una nota
+cambio stato del promemoria
+cancellazione di una nota
+cancellazione di un promemoria
+salvataggio locale dei dati
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Per cancellare è necessaria una pressione prolungata.
