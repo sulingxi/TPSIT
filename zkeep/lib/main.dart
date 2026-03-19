@@ -95,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // apro una finestra per aggiungere una nota
-  Future<void> _displayAddNoteDialog() async {
+  Future<void> _finestraNota() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -121,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // apro una finestra per aggiungere un todo
-  Future<void> _displayAddTodoDialog() async {
+  Future<void> _finestraTodo() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -279,9 +279,9 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (inDetailPage) {
-            _displayAddTodoDialog();
+            _finestraTodo();
           } else {
-            _displayAddNoteDialog();
+            _finestraNota();
           }
         },
         child: const Icon(Icons.add),
