@@ -33,10 +33,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final TextEditingController _textFieldController = TextEditingController();
-  final TextEditingController _todoTextFieldController =
-  TextEditingController();
-
+  final TextEditingController _testnodo = TextEditingController();
+  final TextEditingController _testtodo = TextEditingController();
   final List<Note> _notes = <Note>[];
   final List<Todo> _todos = <Todo>[];
 
@@ -51,11 +49,11 @@ class _MyHomePageState extends State<MyHomePage> {
   // qui inizio app e carico dati
   Future<void> _init() async {
     await DatabaseHelper.init();
-    _updateNotes();
+    _upNodos();
   }
 
   // aggiornare la lista delle note
-  void _updateNotes() {
+  void _upNodos() {
     DatabaseHelper.getNotes().then((notes) {
       setState(() {
         _notes.clear();
@@ -65,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // aggiornare i todo della nota scelta
-  void _updateTodos(int noteId) {
+  void _upTodos(int noteId) {
     DatabaseHelper.getTodosByNote(noteId).then((todos) {
       setState(() {
         _todos.clear();
@@ -89,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // cancello un promemoria con pressione lunga
-  void _handleTodoDelete(Todo todo) {
+  void _TodoDelete(Todo todo) {
     setState(() {
       _todos.remove(todo);
     });
@@ -105,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return AlertDialog(
           title: const Text('add note'),
           content: TextField(
-            controller: _textFieldController,
+            controller: _testnodo,
             decoration: const InputDecoration(hintText: 'note title'),
           ),
           actions: <Widget>[
@@ -113,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('Add'),
               onPressed: () {
                 Navigator.of(context).pop();
-                _addNoteItem(_textFieldController.text);
+                _addNodo(_testnodo.text);
               },
             ),
           ],
@@ -131,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return AlertDialog(
           title: const Text('add todo item'),
           content: TextField(
-            controller: _todoTextFieldController,
+            controller: _testtodo,
             decoration: const InputDecoration(hintText: 'type here ...'),
           ),
           actions: <Widget>[
@@ -139,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('Add'),
               onPressed: () {
                 Navigator.of(context).pop();
-                _addTodoItem(_todoTextFieldController.text);
+                _addTodo(_testtodo.text);
               },
             ),
           ],
@@ -149,22 +147,19 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // aggiungo una nuova nota
-  void _addNoteItem(String title) {
-    // se il testo è vuoto non faccio niente
+  void _addNodo(String title) {
     if (title.trim().isEmpty) return;
 
     Note note = Note(id: null, title: title);
     DatabaseHelper.insertNote(note);
-    _textFieldController.clear();
-    _updateNotes();
+    _testnodo.clear();
+    _upNodos();
   }
 
   // aggiungo un promemoria nella nota scelta
-  void _addTodoItem(String name) {
-    // controllo se c'è una nota scelta
+  void _addTodo(String name) {
     if (_selectedNote == null) return;
 
-    // se testo è vuoto non salvo
     if (name.trim().isEmpty) return;
 
     Todo todo = Todo(
@@ -175,8 +170,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     DatabaseHelper.insertTodo(todo);
-    _todoTextFieldController.clear();
-    _updateTodos(_selectedNote!.id!);
+    _testtodo.clear();
+    _upTodos(_selectedNote!.id!);
   }
 
   // entro dentro la nota scelta
@@ -184,11 +179,11 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _selectedNote = note;
     });
-    _updateTodos(note.id!);
+    _upTodos(note.id!);
   }
 
   // cancello la nota scelta
-  void _deleteNote(Note note) {
+  void _DeleteNote(Note note) {
     if (_selectedNote?.id == note.id) {
       setState(() {
         _selectedNote = null;
@@ -197,7 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     DatabaseHelper.deleteNote(note);
-    _updateNotes();
+    _upNodos();
   }
 
   // qui costruisco la pagina con tutte le note
@@ -217,7 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
               note: note,
               previewTodos: previewTodos,
               onTap: () => _openNote(note),
-              onDelete: () => _deleteNote(note),
+              onDelete: () => _DeleteNote(note),
             );
           },
         );
@@ -249,7 +244,7 @@ class _MyHomePageState extends State<MyHomePage> {
               return TodoItem(
                 todo: _todos[index],
                 onTodoChanged: _handleTodoChange,
-                onTodoDelete: _handleTodoDelete,
+                onTodoDelete: _TodoDelete,
               );
             },
           ),
@@ -272,7 +267,7 @@ class _MyHomePageState extends State<MyHomePage> {
               _selectedNote = null;
               _todos.clear();
             });
-            _updateNotes();
+            _upNodos();
           },
           icon: const Icon(Icons.arrow_back),
         )
@@ -296,8 +291,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void dispose() {
-    _textFieldController.dispose();
-    _todoTextFieldController.dispose();
+    _testnodo.dispose();
+    _testtodo.dispose();
     super.dispose();
   }
 }
