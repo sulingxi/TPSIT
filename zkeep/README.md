@@ -1,30 +1,28 @@
 # ZKeep
 
-autore: Su Leo
+Una semplice applicazione ispirata a Google Keep sviluppata in Flutter + Dart + SQLite.
 
-## Descrizione
-ZKeep è una applicazione semplice ispirata a Google Keep.
+Questo programma include:
+Un'app Flutter che permette di creare più note
+Ogni nota contiene una lista di promemoria
+Un database SQLite locale con due tabelle: notes e todos
+Una schermata principale con le card delle note
+Una schermata di dettaglio per vedere i todo della nota scelta
+Un FloatingActionButton per aggiungere una nota o un promemoria
 
-In questa app ci sono più note e ogni nota contiene una lista di promemoria.
-L'utente può creare una nuova nota e poi aggiungere i todo dentro la nota scelta.
+Funzionalità principali
+Inserisci il titolo di una nuova nota
+Apri una nota con un click
+Aggiungi uno o più promemoria dentro la nota
+Cambia stato del promemoria con un click
+Cancella una nota o un promemoria con pressione lunga
+Salvataggio locale dei dati anche dopo la chiusura dell'app
 
-## Scelte di sviluppo
-Ho mantenuto una struttura semplice con 4 file principali, simile all'esempio del professore.
-Ho usato SQLite perché i dati devono restare salvati anche dopo la chiusura dell'app.
-Ho creato due tabelle: `notes` e `todos`.
-Ho separato note e todo perché una nota può contenere più promemoria.
-Ho usato le card per mostrare le note nella pagina principale in modo più chiaro.
-Ho usato il FloatingActionButton per aggiungere una nota o un promemoria.
-Ho fatto una schermata principale per vedere le note e una schermata di dettaglio per vedere i todo della nota scelta.
+Struttura del progetto
+main.dart contiene la logica principale dell'app
+model.dart contiene le classi Note e Todo
+helper.dart contiene la gestione del database SQLite
+widgets.dart contiene i widget NoteCard e TodoItem
 
-## Funzioni principali
-aggiunta di una nuova nota
-visualizzazione di più note
-apertura di una nota
-aggiunta di promemoria dentro una nota
-cambio stato del promemoria
-cancellazione di una nota
-cancellazione di un promemoria
-salvataggio locale dei dati
-
-## Per cancellare è necessaria una pressione prolungata.
+Autore
+Su Leo
