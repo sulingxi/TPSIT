@@ -3,8 +3,10 @@ import 'helper.dart';
 import 'model.dart';
 import 'widgets.dart';
 
+// Punto di partenza dell'applicazione.
 void main() => runApp(const MaterialApp(home: ProdottiScreen()));
 
+// Schermata principale.
 class ProdottiScreen extends StatefulWidget {
   const ProdottiScreen({super.key});
   @override
@@ -12,16 +14,18 @@ class ProdottiScreen extends StatefulWidget {
 }
 
 class _ProdottiScreenState extends State<ProdottiScreen> {
+  // Lista vuota per i prodotti
   List<Prodotto> _tuttiProdotti = [];
-  String _categoriaSelezionata = 'Tutte'; // Mantengo solo questa variabile per il filtro
+  // Categoria di default
+  String _categoriaSelezionata = 'Tutte';
 
   @override
   void initState() {
     super.initState();
-    DataHelper.init().then((_) => _loadData()); // Inizializzazione rapida
+    DataHelper.init().then((_) => _loadData());
   }
 
-  // Logica semplice per caricare i dati (da internet o dalla cache)
+  // Funzione per caricare i dati
   Future<void> _loadData() async {
     try {
       _tuttiProdotti = await DataHelper.fetchFromServer();
@@ -31,49 +35,82 @@ class _ProdottiScreenState extends State<ProdottiScreen> {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Modalità Offline!')));
       }
     }
-    setState(() {}); // Aggiorna l'interfaccia
+    setState(() {});
   }
 
-  // Finestra semplice: uso solo campi di testo per non complicare il codice
   Future<void> _finestraProdotto({Prodotto? pEsistente}) async {
-    final nomeCtrl = TextEditingController(text: pEsistente?.nome ?? '');
-    final pOrigCtrl = TextEditingController(text: pEsistente?.prezzoOriginale ?? '');
-    final pScontCtrl = TextEditingController(text: pEsistente?.prezzoScontato ?? '');
-    final giorniCtrl = TextEditingController(text: pEsistente?.giorniScadenza.toString() ?? '');
-    final catCtrl = TextEditingController(text: pEsistente?.categoriaId.toString() ?? '1'); // L'ID si inserisce a mano
+
+    // 1. Prima creo le caselle di testo vuote
+    final nomeCtrl = TextEditingController();
+    final pOrigCtrl = TextEditingController();
+    final pScontCtrl = TextEditingController();
+    final giorniCtrl = TextEditingController();
+    final catCtrl = TextEditingController();
+
+    // 2. Uso un IF classico per riempire le caselle se sto modificando
+    String titoloFinestra = 'Nuovo Prodotto';
+
+    if (pEsistente != null) {
+      // Se il prodotto esiste già, riempio le caselle con i vecchi dati
+      titoloFinestra = 'Modifica Prodotto';
+      nomeCtrl.text = pEsistente.nome;
+      pOrigCtrl.text = pEsistente.prezzoOriginale;
+      pScontCtrl.text = pEsistente.prezzoScontato;
+      giorniCtrl.text = pEsistente.giorniScadenza.toString();
+      catCtrl.text = pEsistente.categoriaId.toString();
+    } else {
+      // Se è nuovo, metto solo la categoria 1 di default
+      catCtrl.text = '1';
+    }
 
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(pEsistente != null ? 'Modifica' : 'Nuovo'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(controller: nomeCtrl, decoration: const InputDecoration(labelText: 'Nome')),
-            TextField(controller: pOrigCtrl, decoration: const InputDecoration(labelText: 'Prezzo Originale')),
-            TextField(controller: pScontCtrl, decoration: const InputDecoration(labelText: 'Prezzo Scontato')),
-            TextField(controller: giorniCtrl, decoration: const InputDecoration(labelText: 'Giorni (Scadenza)')),
-            TextField(controller: catCtrl, decoration: const InputDecoration(labelText: 'ID Categoria (1-5)')),
-          ],
+        title: Text(titoloFinestra),
+
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(controller: nomeCtrl, decoration: const InputDecoration(labelText: 'Nome')),
+              TextField(controller: pOrigCtrl, decoration: const InputDecoration(labelText: 'Prezzo Originale')),
+              TextField(controller: pScontCtrl, decoration: const InputDecoration(labelText: 'Prezzo Scontato')),
+              TextField(controller: giorniCtrl, decoration: const InputDecoration(labelText: 'Giorni (Scadenza)')),
+              TextField(controller: catCtrl, decoration: const InputDecoration(labelText: 'ID Categoria (1-5)')),
+            ],
+          ),
         ),
         actions: [
           ElevatedButton(
             onPressed: () async {
               Navigator.pop(context);
+
+              // Leggo i testi inseriti per creare il pacchetto
+              int giorni = int.tryParse(giorniCtrl.text) ?? 0;
+              int categoria = int.tryParse(catCtrl.text) ?? 1;
+
               Prodotto nuovoP = Prodotto(
                 id: pEsistente?.id,
                 nome: nomeCtrl.text,
                 prezzoOriginale: pOrigCtrl.text,
                 prezzoScontato: pScontCtrl.text,
-                giorniScadenza: int.tryParse(giorniCtrl.text) ?? 0,
-                categoriaId: int.tryParse(catCtrl.text) ?? 1,
+                giorniScadenza: giorni,
+                categoriaId: categoria,
               );
 
-              bool ok = pEsistente != null
-                  ? await DataHelper.updateProdotto(nuovoP)
-                  : await DataHelper.insertProdotto(nuovoP);
+              // 3. Uso un IF classico per decidere se Aggiornare o Inserire
+              bool ok = false;
+              if (pEsistente != null) {
+                // Se esisteva, aggiorno
+                ok = await DataHelper.updateProdotto(nuovoP);
+              } else {
+                // Se è nuovo, inserisco
+                ok = await DataHelper.insertProdotto(nuovoP);
+              }
 
-              if (ok) _loadData(); // Se ha successo, ricarico la lista
+              if (ok) {
+                _loadData();
+              }
             },
             child: const Text('Salva'),
           ),
@@ -84,10 +121,10 @@ class _ProdottiScreenState extends State<ProdottiScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Filtro per categoria e ordino automaticamente per scadenza più vicina
     List<Prodotto> lista = _tuttiProdotti.where((p) =>
     _categoriaSelezionata == 'Tutte' || p.categoriaId.toString() == _categoriaSelezionata
     ).toList();
+
     lista.sort((a, b) => a.giorniScadenza.compareTo(b.giorniScadenza));
 
     return Scaffold(
@@ -97,7 +134,6 @@ class _ProdottiScreenState extends State<ProdottiScreen> {
       ),
       body: Column(
         children: [
-          // Menu a tendina per filtrare la lista
           DropdownButton<String>(
             value: _categoriaSelezionata,
             items: const [
